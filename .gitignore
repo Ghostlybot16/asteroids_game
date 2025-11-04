@@ -1,0 +1,8 @@
+# Ignore the virtual environment directory (venv)
+.venv/
+
+# Ignore pycache files 
+__pycache__/
+
+# Ignore python-version file 
+.python-version
