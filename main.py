@@ -37,13 +37,13 @@ def main() -> None:
     
     # Fixed FPS timer
     clock = pygame.time.Clock() 
-    dt = 0 # stores seconds elapses per frame
+    dt = 0 # stores seconds elapsed per frame
     
     
     
     # Sprite groups:
     #   - updatable: any object that implements .update(dt)
-    #   - drawable: any object that implements .draw(scree)
+    #   - drawable: any object that implements .draw(screen)
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
@@ -51,7 +51,7 @@ def main() -> None:
     # Set contianers on classes
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
-    AsteroidField.containers = updatable
+    AsteroidField.containers = (updatable,)
     
     # Spawn the player at the center of the screen.
     player = Player(int(SCREEN_WIDTH/2), int(SCREEN_HEIGHT/2))
@@ -72,6 +72,11 @@ def main() -> None:
         
         updatable.update(dt) # Group update forwards dt to each member's .update(dt)
         
+        for asteroid in asteroids:
+            if asteroid.collision_check(player):
+                print("Game Over!")
+                pygame.quit()
+                return
         
         # --- Rendering ---
         # Fill black background 
