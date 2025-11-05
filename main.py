@@ -81,11 +81,11 @@ def main() -> None:
                 pygame.quit()
                 return
         
-        for asteroid in asteroids.sprites():
+        for asteroid in asteroids.sprites():  
             for bullet in shots.sprites():
-                if bullet.collision_check(asteroid): # If bullet and asteroids collide, remove both objects from display
+                if asteroid.collision_check(bullet): # If bullet and asteroids collide, remove both objects from display
                     bullet.kill()
-                    asteroid.kill()
+                    asteroid.split()
                     break
          
         # --- Rendering ---
