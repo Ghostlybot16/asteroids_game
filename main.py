@@ -81,6 +81,13 @@ def main() -> None:
                 pygame.quit()
                 return
         
+        for asteroid in asteroids.sprites():
+            for bullet in shots.sprites():
+                if bullet.collision_check(asteroid): # If bullet and asteroids collide, remove both objects from display
+                    bullet.kill()
+                    asteroid.kill()
+                    break
+         
         # --- Rendering ---
         # Fill black background 
         screen.fill((0, 0, 0))
