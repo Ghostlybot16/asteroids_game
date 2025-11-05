@@ -15,6 +15,8 @@ from constants import (
     ASTEROID_SPAWN_RATE,
 )
 from player import Player
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
 
 
 def main() -> None:
@@ -44,11 +46,18 @@ def main() -> None:
     #   - drawable: any object that implements .draw(scree)
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
+    asteroids = pygame.sprite.Group()
     
-    Player.containers = (updatable, drawable) # Set containers on the class 
+    # Set contianers on classes
+    Player.containers = (updatable, drawable)
+    Asteroid.containers = (asteroids, updatable, drawable)
+    AsteroidField.containers = updatable
     
     # Spawn the player at the center of the screen.
     player = Player(int(SCREEN_WIDTH/2), int(SCREEN_HEIGHT/2))
+    
+    # Spawn asteroid field 
+    asteroid_field = AsteroidField()
    
    
     

@@ -20,7 +20,7 @@ class Player(CircleShape):
     def draw(self, screen):
         pygame.draw.polygon(
             surface=screen, 
-            color="white", 
+            color="green", 
             points=self.triangle(), 
             width=2
         )
