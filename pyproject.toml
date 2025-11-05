@@ -1,9 +1,17 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "asteroid-project"
+name = "asteroids"
 version = "0.1.0"
-description = "Add your description here"
+description = "Asteroids game developed with pygame"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "pygame==2.6.1",
 ]
+
+# find packages under src/
+[tool.setuptools.packages.find]
+where = ["src"]

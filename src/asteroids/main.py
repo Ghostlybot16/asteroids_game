@@ -6,18 +6,14 @@ spawns the Player at screen center, and runs the fixed-timestep render loop.
 
 
 import pygame
-from constants import (
+from asteroids.constants import (
     SCREEN_HEIGHT, 
     SCREEN_WIDTH, 
-    ASTEROID_KINDS, 
-    ASTEROID_MIN_RADIUS, 
-    ASTEROID_MAX_RADIUS, 
-    ASTEROID_SPAWN_RATE,
 )
-from player import Player
-from asteroid import Asteroid
-from asteroidfield import AsteroidField
-from shoot import Shot
+from asteroids.actors.player import Player
+from asteroids.actors.asteroid import Asteroid
+from asteroids.actors.shoot import Shot
+from asteroids.systems.asteroidfield import AsteroidField
 
 
 def main() -> None:
