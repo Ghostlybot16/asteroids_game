@@ -9,6 +9,10 @@ class Player(CircleShape):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.shoot_timer = 0
+        
+        # post-respawn invulnerability 
+        self.is_invulnerable = False
+        self.invulnerable_timer = 0.0
     
     
     def triangle(self):
@@ -20,9 +24,15 @@ class Player(CircleShape):
         return [a, b, c]
     
     def draw(self, screen):
+        # Normal = green, invulnerable = Blueish
+        color = (0, 255, 0)
+        
+        if self.is_invulnerable:
+            color = (100, 100, 255)
+        
         pygame.draw.polygon(
             surface=screen, 
-            color="green", 
+            color=color, 
             points=self.triangle(), 
             width=2
         )
@@ -51,6 +61,13 @@ class Player(CircleShape):
             if self.shoot_timer < 0: 
                 self.shoot_timer = 0
         
+        # Handle invulnerability countdown 
+        if self.invulnerable_timer > 0:
+            self.invulnerable_timer -= dt
+            if self.invulnerable_timer <= 0:
+                self.invulnerable_timer = 0
+                self.is_invulnerable = False
+        
         # Shoot 
         if keys[pygame.K_SPACE]:
             if self.shoot_timer <= 0:
@@ -72,5 +89,11 @@ class Player(CircleShape):
         shot = Shot(bullet_spawn_pos.x, bullet_spawn_pos.y)
         
         shot.velocity = forward * PLAYER_SHOOT_SPEED
+    
+    
+    def make_invulnerable(self, duration):
+        """Make the player invulnerable for `duration` seconds."""
+        self.is_invulnerable = True
+        self.invulnerable_timer = duration
         
 

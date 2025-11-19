@@ -9,8 +9,11 @@ import pygame
 from asteroids.constants import (
     SCREEN_HEIGHT, 
     SCREEN_WIDTH, 
+    CENTER_SCREEN_WIDTH,
+    CENTER_SCREEN_HEIGHT,
     ASTEROID_MIN_RADIUS,
-    ASTEROID_KINDS
+    ASTEROID_KINDS,
+    PLAYER_INITIAL_LIVES
 )
 from asteroids.actors.player import Player
 from asteroids.actors.asteroid import Asteroid
@@ -64,6 +67,9 @@ def main() -> None:
     score = 0
     font = pygame.font.Font(None, 48) # Default font, 48px for better visibility
     
+    # Player lives 
+    lives = PLAYER_INITIAL_LIVES
+    
     # Sprite groups:
     #   - updatable: any object that implements .update(dt)
     #   - drawable: any object that implements .draw(screen)
@@ -79,7 +85,7 @@ def main() -> None:
     Shot.containers = (shots, updatable, drawable)
     
     # Spawn the player at the center of the screen.
-    player = Player(int(SCREEN_WIDTH/2), int(SCREEN_HEIGHT/2))
+    player = Player(CENTER_SCREEN_WIDTH, CENTER_SCREEN_HEIGHT)
     
     # Spawn asteroid field 
     asteroid_field = AsteroidField()
@@ -98,10 +104,26 @@ def main() -> None:
         updatable.update(dt) # Group update forwards dt to each member's .update(dt)
         
         for asteroid in asteroids:
-            if asteroid.collision_check(player):
-                print("Game Over!")
-                pygame.quit()
-                return
+            if player.is_invulnerable: # Skip collision chceks if player is invulnerable
+                continue
+            
+            if asteroid.collision_check(player): # Lose a live after collision with asteroid
+                lives -= 1 
+                
+                if lives <= 0:
+                    print("Game Over!")
+                    pygame.quit()
+                    return
+
+                # Respawn player at center with no velocity and reset rotation
+                player.position.update(CENTER_SCREEN_WIDTH, CENTER_SCREEN_HEIGHT)
+                player.velocity.update(0, 0)
+                player.rotation = 0
+                
+                # Brief invulnerability after respawn (2 seconds)
+                player.make_invulnerable(2.0)
+                
+                break
         
         for asteroid in asteroids.sprites():  
             for bullet in shots.sprites():
@@ -125,25 +147,36 @@ def main() -> None:
             sprite.draw(screen)
         
         
-        # Draw score HUD 
-        score_text = font.render(f"Score: {score}", True, (0, 255, 255))
+        # Draw HUD (Score + Lives)
+        hud_color = (0, 255, 255)
+        
+        score_text = font.render(f"Score: {score}", True, hud_color)
+        lives_text = font.render(f"Lives: {lives}", True, hud_color)
+        
         score_rect = score_text.get_rect()
+        lives_rect = lives_text.get_rect()
+        
+        # Position text lines
         score_rect.topleft = (30, 20) # away from top-left corner
+        lives_rect.topleft = (30, score_rect.bottom + 8)
         
         # Create background box around the text 
         padding = 12
+        hud_width = max(score_rect.width, lives_rect.width) + padding * 2
+        hud_height = (lives_rect.bottom - score_rect.top) + padding * 2
         hud_rect = pygame.Rect(
             score_rect.left - padding, 
             score_rect.top - padding,
-            score_rect.width + padding * 2,
-            score_rect.height + padding * 2, 
+            hud_width,
+            hud_height, 
         )
         
         # Draw HUD background and border 
         pygame.draw.rect(screen, (20, 20, 20), hud_rect) # dark grey background
-        pygame.draw.rect(screen, (0, 255, 255), hud_rect, 2) # cyan border
+        pygame.draw.rect(screen, hud_color, hud_rect, 2) # cyan border
         
         screen.blit(score_text, score_rect)
+        screen.blit(lives_text, lives_rect)
         
         
         pygame.display.flip() # Present the frame to the screen
