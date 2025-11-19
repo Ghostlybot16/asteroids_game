@@ -9,3 +9,7 @@ __pycache__/
 
 # Ignore build metadata directory 
 asteroids.egg-info/
+
+# Ignore gameplay log files 
+game_state.json1
+game_events.json1
