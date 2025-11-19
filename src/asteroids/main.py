@@ -9,11 +9,35 @@ import pygame
 from asteroids.constants import (
     SCREEN_HEIGHT, 
     SCREEN_WIDTH, 
+    ASTEROID_MIN_RADIUS,
+    ASTEROID_KINDS
 )
 from asteroids.actors.player import Player
 from asteroids.actors.asteroid import Asteroid
 from asteroids.actors.shoot import Shot
 from asteroids.systems.asteroidfield import AsteroidField
+
+
+def score_for_asteroid(asteroid: Asteroid) -> int:
+    """Return how many points the player gets for destroying an asteroid
+    
+    - Big asteroids are worth fewer points 
+    - Small asteroids are worth more points (harder to hit)
+    """
+    
+    # Make sure the size category stays in a safe range even if the radius is a bit off 
+    # Prevents radii like 19.999 / 41.3
+    approximate_size_step = int(asteroid.radius // ASTEROID_MIN_RADIUS)
+    
+    # Clamp asteroid size to always stay between 1 and ASTEROID_KINDS value.
+    size_step = max(1, approximate_size_step)
+    size_step = min(size_step, ASTEROID_KINDS)
+    
+    # Convert the size step into points 
+    points_per_step = 50
+    points = (ASTEROID_KINDS - size_step + 1) * points_per_step
+    
+    return points
 
 
 def main() -> None:
@@ -36,7 +60,9 @@ def main() -> None:
     clock = pygame.time.Clock() 
     dt = 0 # stores seconds elapsed per frame
     
-    
+    # Scoring
+    score = 0
+    font = pygame.font.Font(None, 48) # Default font, 48px for better visibility
     
     # Sprite groups:
     #   - updatable: any object that implements .update(dt)
@@ -79,8 +105,14 @@ def main() -> None:
         
         for asteroid in asteroids.sprites():  
             for bullet in shots.sprites():
-                if asteroid.collision_check(bullet): # If bullet and asteroids collide, remove both objects from display
+                if asteroid.collision_check(bullet): 
+                # If bullet and asteroids collide, delete bullet from screen and split asteroid
+                    
                     bullet.kill()
+                    
+                    # Increase score based on asteroid size BEFORE split 
+                    score += score_for_asteroid(asteroid)
+                    
                     asteroid.split()
                     break
          
@@ -91,6 +123,27 @@ def main() -> None:
         
         for sprite in drawable:
             sprite.draw(screen)
+        
+        
+        # Draw score HUD 
+        score_text = font.render(f"Score: {score}", True, (0, 255, 255))
+        score_rect = score_text.get_rect()
+        score_rect.topleft = (30, 20) # away from top-left corner
+        
+        # Create background box around the text 
+        padding = 12
+        hud_rect = pygame.Rect(
+            score_rect.left - padding, 
+            score_rect.top - padding,
+            score_rect.width + padding * 2,
+            score_rect.height + padding * 2, 
+        )
+        
+        # Draw HUD background and border 
+        pygame.draw.rect(screen, (20, 20, 20), hud_rect) # dark grey background
+        pygame.draw.rect(screen, (0, 255, 255), hud_rect, 2) # cyan border
+        
+        screen.blit(score_text, score_rect)
         
         
         pygame.display.flip() # Present the frame to the screen
