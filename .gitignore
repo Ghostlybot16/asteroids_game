@@ -11,5 +11,5 @@ __pycache__/
 asteroids.egg-info/
 
 # Ignore gameplay log files 
-game_state.json1
-game_events.json1
+game_state.jsonl
+game_events.jsonl

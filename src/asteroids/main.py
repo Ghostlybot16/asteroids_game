@@ -17,7 +17,7 @@ from asteroids.constants import (
 )
 from asteroids.actors.player import Player
 from asteroids.actors.asteroid import Asteroid
-from asteroids.actors.shoot import Shot
+from asteroids.actors.shot import Shot
 from asteroids.systems.asteroidfield import AsteroidField
 
 
