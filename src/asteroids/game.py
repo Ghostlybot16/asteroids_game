@@ -81,7 +81,8 @@ class Game:
         
         self.player.make_invulnerable(duration=2.0)
     
-    def score_for_asteroid(self, asteroid: Asteroid) -> int:
+    @staticmethod
+    def score_for_asteroid(asteroid: Asteroid) -> int:
         """Return the points awarded for destroying an asteroid."""
         
         approximate_size_step = int(asteroid.radius // ASTEROID_MIN_RADIUS)

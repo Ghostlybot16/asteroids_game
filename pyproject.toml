@@ -12,6 +12,11 @@ dependencies = [
     "pygame==2.6.1",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.0,<10.0",
+]
+
 # find packages under src/
 [tool.setuptools.packages.find]
 where = ["src"]
