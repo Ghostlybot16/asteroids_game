@@ -12,12 +12,14 @@ Subclasses are expected to override:
 - `update(self, dt)` to advance their state frame
 """
 
+from abc import ABC, abstractmethod
+
 import pygame 
 
 
 
-class CircleShape(pygame.sprite.Sprite):
-    """ A circular game object with position, velocity and radius.
+class CircleShape(pygame.sprite.Sprite, ABC):
+    """A circular game object with position, velocity and radius.
     
     This class also participates in `pygame.sprite.Group` management using a 
     class attribute called `containers`.
@@ -56,13 +58,10 @@ class CircleShape(pygame.sprite.Sprite):
         
         # Collision/draw size (pixels).
         self.radius = radius
-        
-    
-    
-    
-    # Hooks for subclasses 
-    def draw(self, screen: pygame.surface) -> None:
-        """Render this object tot he given screen.
+
+    @abstractmethod
+    def draw(self, screen: pygame.Surface) -> None:
+        """Render this object to the given screen.
         
         Parameters
         ----------
@@ -71,7 +70,7 @@ class CircleShape(pygame.sprite.Sprite):
         """
         pass
 
-
+    @abstractmethod
     def update(self, dt: float) -> None:
         """Advance this object's simulation by `dt` seconds.
         
@@ -82,13 +81,10 @@ class CircleShape(pygame.sprite.Sprite):
         """
         pass
     
-    
-    
-    
     def collision_check(self, another_circle: "CircleShape") -> bool:
         """Return True if this circle intersects `another_circle`.
         
-        Uses circle-circle collition: two circles overlap when the distance
+        Uses circle-circle collision: two circles overlap when the distance
         between centers is less than or equal to the sum of their radii.
         
         Parameters
@@ -105,5 +101,3 @@ class CircleShape(pygame.sprite.Sprite):
         circle_radii = self.radius + another_circle.radius # radii -> plural for radius
         
         return distance_between_circles <= circle_radii
-    
-                
