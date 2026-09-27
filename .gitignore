@@ -4,6 +4,9 @@
 # Ignore pycache files 
 __pycache__/
 
+# Test cache
+.pytest_cache/
+
 # Ignore python-version file 
 .python-version
 
