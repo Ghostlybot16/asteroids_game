@@ -16,8 +16,6 @@ from abc import ABC, abstractmethod
 
 import pygame 
 
-
-
 class CircleShape(pygame.sprite.Sprite, ABC):
     """A circular game object with position, velocity and radius.
     

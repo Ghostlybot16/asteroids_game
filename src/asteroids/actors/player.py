@@ -115,5 +115,3 @@ class Player(CircleShape):
         """Make the player invulnerable for `duration` seconds."""
         self.is_invulnerable = True
         self.invulnerable_timer = duration
-        
-

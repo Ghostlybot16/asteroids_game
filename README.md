@@ -6,22 +6,22 @@ A recreation of the classic **Asteroids** arcade game using Python and Pygame.
 
 I originally built this project to practice object-oriented programming in Python. After getting the core game working, I refactored the project to improve its class structure, separate responsibilities, add type hints, and introduce automated testing. 
 
-The project helped me move beyond simply creating classes and better understand how abstraction, intehirance, polymorphism and object responsibilities can be applied to a working program. 
+The project helped me move beyond simply creating classes and better understand how abstraction, inheritance, polymorphism and object responsibilities can be applied to a working program. 
 
 ![Game Screenshot](docs/images/game-screenshot.png)
 
 ### Features
 
 - Player movement and rotation
-- Projectile sooting with a cooldown
+- Projectile shooting with a cooldown
 - Random asteroid spawning 
 - Multiple asteroid sizes
 - Asteroids split into smaller, faster asteroid when hit
-- Cicle-based collision detection
+- Circle-based collision detection
 - Score system based on asteroid size
 - Player lives 
 - Respawning after collisions
-- Temporary invulnetability after respawning
+- Temporary invulnerability after respawning
 - HUD displaying score and remaining lives
 - Automated tests for core game logic 
 
@@ -71,7 +71,7 @@ This project is separated by responsibility:
 
 #### Abstraction
 
-`CircleShape` isan abstract base class representing game entities that use circular collision boundaries. 
+`CircleShape` is an abstract base class representing game entities that use circular collision boundaries. 
 
 It stores state shared by these entities: 
 - position
@@ -80,7 +80,7 @@ It stores state shared by these entities:
 
 It also provides shared circle-to-circle collision detection. 
 
-The class defines `draw()` and `update()` as abstract methods. This requires concrete subclasses to decide how they should be rendered and updated instead of provided behaviour that may not make sense for evey game entity.
+The class defines `draw()` and `update()` as abstract methods. This requires concrete subclasses to decide how they should be rendered and updated instead of providing behaviour that may not make sense for every game entity.
 
 A generic `CircleShape` is not intended to exist directly in the game. Instead, it establishes common state, behaviour and a contract for the concrete game entities. 
 
@@ -90,7 +90,7 @@ A generic `CircleShape` is not intended to exist directly in the game. Instead, 
 
 `Player`, `Asteroid` and `Shot` inherit from `CircleShape`.
 
-This allows them to reuse common functionaility such as position, velocity, radius, Pygame sprite behaviour, and collision detection without duplicating that logic in every class. 
+This allows them to reuse common functionality such as position, velocity, radius, Pygame sprite behaviour, and collision detection without duplicating that logic in every class. 
 
 Each subclass then adds behaviour specific to its responsibility.
 
@@ -139,7 +139,7 @@ For example, the `Game` class owns overall game state and coordination:
 
 The `Player` manages behaviour specific to the player, including movement, shooting, cooldowns, and invulnerability.
 
-The `Asteroids` knows how to split itself, while the `Game` determines when a collision should cause that split. 
+The `Asteroid` knows how to split itself, while the `Game` determines when a collision should cause that split. 
 
 This separation keeps individual classes focused and prevents the main game loop from containing all of the application's logic.
 
@@ -204,14 +204,14 @@ For development, including pytest:
 python -m pip install -e ".[dev]"
 ```
 
-**Running the Game**
+##### Running the Game
 From the repository root:
 
 ```bash
 python -m asteroids.main
 ```
 
-**Controls**
+##### Controls
 W - Forward
 S - Backwards
 A - Rotate Left 

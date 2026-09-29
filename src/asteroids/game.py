@@ -99,7 +99,7 @@ class Game:
     def handle_player_collisions(self) -> None:
         """Handle collisions between the player and asteroids."""
         
-        # Dont check collisions while the player is temporarily invulnerable.
+        # Don't check collisions while the player is temporarily invulnerable.
         if self.player.is_invulnerable:
             return 
         
@@ -129,7 +129,7 @@ class Game:
                     break
     
     def handle_collisions(self) -> None:
-        """Abstraction method, Handle all game collisions."""
+        """Handle all game collisions."""
         
         self.handle_player_collisions()
         self.handle_shot_collisions()
